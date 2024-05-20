@@ -1,8 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
-import { ThemeProvider } from "styled-components";
-import { theme } from "./Theme";
+import { RecoilRoot } from "recoil";
 import { QueryClientProvider, QueryClient } from "react-query";
 
 const queryClient = new QueryClient();
@@ -11,9 +10,9 @@ const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
-  <QueryClientProvider client={queryClient}>
-    <ThemeProvider theme={theme}>
+  <RecoilRoot>
+    <QueryClientProvider client={queryClient}>
       <App />
-    </ThemeProvider>
-  </QueryClientProvider>
+    </QueryClientProvider>
+  </RecoilRoot>
 );

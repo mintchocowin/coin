@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import { fetchCoins } from "../api";
 import { useQuery } from "react-query";
 import { Helmet } from "react-helmet";
+import { isDarkAtom } from "../atom";
+import { useSetRecoilState } from "recoil";
 
 const Container = styled.div`
   padding: 20px;
@@ -18,8 +20,8 @@ const Header = styled.header`
 `;
 const CoinList = styled.ul``;
 const Coin = styled.li`
-  background-color: ${(props) => props.theme.textColor};
-  color: ${(props) => props.theme.bgColor};
+  background-color: ${(props) => props.theme.accentColor};
+  color: ${(props) => props.theme.textColor};
   padding: 20px;
   border-radius: 16px;
   margin-bottom: 10px;
@@ -29,7 +31,7 @@ const Coin = styled.li`
     padding: 20px;
     transition: all 0.3s;
     &:hover {
-      color: ${(props) => props.theme.accentColor};
+      color: ${(props) => props.theme.bgColor};
     }
   }
 `;
@@ -59,21 +61,13 @@ interface CoinInterface {
   is_active: boolean;
   type: string;
 }
+interface ICoinProps {
+  toggleDark: () => void;
+}
 
-const Coins = () => {
+const Coins = ({ toggleDark }: ICoinProps) => {
+  const setterFn = useSetRecoilState(isDarkAtom);
   const { isLoading, data } = useQuery<CoinInterface[]>("allCoins", fetchCoins);
-  // const [coins, setCoins] = useState<CoinInterface[]>([]);
-  // const [loading, setLoading] = useState(true);
-  // useEffect(() => {
-  //   (async () => {
-  //     const response = await fetch(
-  //       "https://my-json-server.typicode.com/Divjason/coinlist/coins"
-  //     );
-  //     const json = await response.json();
-  //     setCoins(json);
-  //     setLoading(false);
-  //   })();
-  // }, []);
   return (
     <Container>
       <Helmet>
@@ -81,6 +75,7 @@ const Coins = () => {
       </Helmet>
       <Header>
         <Title>Coins Information</Title>
+        <button onClick={() => setterFn((prev) => !prev)}>Toggle Mode</button>
       </Header>
       {isLoading ? (
         <Loader>"Loading..."</Loader>
